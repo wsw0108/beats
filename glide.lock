@@ -1,10 +1,10 @@
-hash: d31e53edbc1bb8c23dffd73d53ba7731f601a824913c0efb010ee02a574eff6a
-updated: 2017-09-15T19:28:10.4228402+08:00
+hash: 75bc255a7e54d48ffc898674a30e2c313784d02d2a7ed9d16b7bb9097b5ad08b
+updated: 2017-09-15T22:43:35.7077279+08:00
 imports:
 - name: github.com/denisenkom/go-mssqldb
   version: b49fae7d39756354262c5f385d4cf04f9ac6618b
 - name: github.com/elastic/beats
-  version: 6e814513e3713446c2ddd9656099b3d7118d60e4
+  version: 655e403948ec6c21796168abc221ddfbc8b439b2
   subpackages:
   - libbeat/common
   - libbeat/common/file
@@ -44,7 +44,7 @@ imports:
 - name: github.com/satori/go.uuid
   version: 879c5887cd475cd7864858769793b2ceb0d44feb
 - name: golang.org/x/crypto
-  version: faadfbdc035307d901e69eea569f5dda451a3ee3
+  version: b0c9c05bfe149df95eb1d25642162cca051e0466
   subpackages:
   - md4
 - name: golang.org/x/net
