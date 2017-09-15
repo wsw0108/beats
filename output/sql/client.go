@@ -12,6 +12,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 
+	"github.com/elastic/beats/libbeat/common"
 	"github.com/elastic/beats/libbeat/outputs"
 )
 
@@ -47,6 +48,15 @@ func (c *client) PublishEvent(data outputs.Data) error {
 	names := make([]string, 0, len)
 	values := make([]interface{}, 0, len)
 	for name, value := range event {
+		if name == "@timestamp" {
+			name = "timestamp"
+		}
+		switch v := value.(type) {
+		case common.Time:
+			value = v.String()
+		case common.MapStr:
+			value = v.String()
+		}
 		names = append(names, name)
 		values = append(values, value)
 	}
@@ -64,19 +74,26 @@ func (c *client) PublishEvent(data outputs.Data) error {
 	b.WriteByte(')')
 	b.WriteString(" VALUES ")
 	b.WriteByte('(')
-	for i, _ := range values {
+	for i := range values {
+		b.WriteString("?")
 		if i < len-1 {
-			b.WriteString("?, ")
+			b.WriteString(", ")
 		}
 	}
 	b.WriteByte(')')
 	b.WriteByte(';')
 	query := b.String()
-	debugf("query is %s", query)
+	debugf("query: '%s'", query)
 	_, err := c.db.Exec(query, values...)
 	return err
 }
 
 func (c *client) PublishEvents(data []outputs.Data) ([]outputs.Data, error) {
+	for i, d := range data {
+		err := c.PublishEvent(d)
+		if err != nil {
+			return data[i:], err
+		}
+	}
 	return nil, nil
 }
